@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+def androidCfg = rootProject.ext.android
+def depCfg = rootProject.ext.dependenciesVersion
+
+android {
+    compileSdkVersion androidCfg.compileSdkVersion
+    buildToolsVersion androidCfg.buildToolsVersion
+    defaultConfig {
+        applicationId "org.zwh.loop_pager.demo"
+        minSdkVersion androidCfg.minSdkVersion
+        targetSdkVersion androidCfg.targetSdkVersion
+        versionCode 100
+        versionName "1.0.0"
+
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+        resConfigs 'en', 'zh-rCN'
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${depCfg.kotlin}"
+    implementation "androidx.appcompat:appcompat:${depCfg.androidxAppcompat}"
+    implementation "androidx.core:core-ktx:${depCfg.androidxCoreKtx}"
+    implementation "androidx.recyclerview:recyclerview:${depCfg.androidxRecyclerView}"
+    implementation "androidx.legacy:legacy-support-v4:${depCfg.androidxLegacySupportV4}"
+
+    implementation project(':loopPager')
+
+    testImplementation "junit:junit:4.12"
+}

@@ -1,0 +1,26 @@
+ext {
+    android = [
+            compileSdkVersion:29,
+            buildToolsVersion:'29.0.0',
+            minSdkVersion:21,
+            targetSdkVersion:29
+    ]
+
+
+    dependenciesVersion = [
+            kotlin:'1.3.50',
+            androidxAppcompat:'1.1.0',
+            androidxCoreKtx:'1.1.0',
+            androidxRecyclerView:'1.0.0',
+            androidxCardView:'1.0.0',
+            androidxConstraintLayout:'1.1.3',
+            androidxLifcycleEx:'2.1.0',
+            androidxLifcycleVmKtx:'2.2.0-alpha05',
+            androidxLegacySupportV4:'1.0.0',
+
+            leakcanaryAndroid:'1.6.3',
+            glide:'4.9.0',
+            BaseRecyclerViewAdapterHelper:'2.9.45-androidx',
+            autosize:'1.1.2',
+    ]
+}

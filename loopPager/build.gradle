@@ -1,0 +1,39 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+
+def androidCfg = rootProject.ext.android
+def depCfg = rootProject.ext.dependenciesVersion
+android {
+    compileSdkVersion androidCfg.compileSdkVersion
+    buildToolsVersion androidCfg.buildToolsVersion
+
+
+    defaultConfig {
+        minSdkVersion androidCfg.minSdkVersion
+        targetSdkVersion androidCfg.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.appcompat:appcompat:${depCfg.androidxAppcompat}"
+    implementation "androidx.core:core-ktx:${depCfg.androidxCoreKtx}"
+    implementation "androidx.recyclerview:recyclerview:${depCfg.androidxRecyclerView}"
+    implementation "androidx.legacy:legacy-support-v4:${depCfg.androidxLegacySupportV4}"
+    testImplementation 'junit:junit:4.12'
+}
