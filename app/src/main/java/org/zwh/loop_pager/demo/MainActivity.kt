@@ -1,13 +1,14 @@
 package org.zwh.loop_pager.demo
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import org.zwh.loop_pager.LoopLayoutManager
-import org.zwh.loop_pager.curSelectedPage
-import org.zwh.loop_pager.setLoop
+import org.zwh.loop_pager.*
 
 class MainActivity : AppCompatActivity() {
+    private val TAG = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = PictureAdapter(this)
         rv.layoutManager = LoopLayoutManager(this)
+        rv.addOnPageChangeListener(pageListener)
         rv.adapter = adapter
         rv.setLoop(true)
 
@@ -28,4 +30,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        rv.removeOnPageChangeListener(pageListener)
+    }
+
+    private var toast: Toast? = null
+
+    private val pageListener = object : OnPageChangeListener {
+        override fun onPageSelected(pos: Int) {
+            Log.d(TAG, "selected page: $pos")
+            toast?.cancel()
+            toast = Toast.makeText(this@MainActivity, "selected --> $pos", Toast.LENGTH_LONG)
+            toast?.show()
+        }
+
+        override fun onPageScrollState(state: Int) {
+//            Log.d(TAG, "page scroll state: $state")
+        }
+    }
 }

@@ -16,12 +16,14 @@ class LoopLayoutManager(
     @JvmField
     internal var orientationHelper: OrientationHelper? = null
     private var smoothScroller: RecyclerView.SmoothScroller? = null
+    private val onPageChangeListeners = ArrayList<OnPageChangeListener>()
 
     private var recyclerView: RecyclerView? = null
     internal var loop: Boolean = false
     internal var curItem: Int = -1
 
     private var requestLayout = false
+    private var firstLayout = true
 
     fun setLoopEnable(loop: Boolean) {
         this.loop = loop
@@ -79,10 +81,15 @@ class LoopLayoutManager(
             }
         }
 
-        if (requestLayout) {
+        if (requestLayout || firstLayout) {
             curItem = initPos
         }
         requestLayout = false
+
+        if (firstLayout) {
+            firstLayout = false
+            dispatchOnPageSelected(initPos)
+        }
     }
 
     private fun normalizedPos(position: Int): Int {
@@ -99,6 +106,7 @@ class LoopLayoutManager(
         curItem = normalizedPos(position)
         requestLayout = true
         requestLayout()
+        dispatchOnPageSelected(curItem)
     }
 
     override fun smoothScrollToPosition(recyclerView: RecyclerView, state: RecyclerView.State?, position: Int) {
@@ -107,6 +115,7 @@ class LoopLayoutManager(
         startSmoothScroll(scroller)
         smoothScroller = scroller
         curItem = scroller.targetPosition
+        dispatchOnPageSelected(curItem)
     }
 
     override fun computeScrollVectorForPosition(targetPosition: Int): PointF? {
@@ -171,5 +180,27 @@ class LoopLayoutManager(
 
     override fun checkLayoutParams(lp: RecyclerView.LayoutParams?): Boolean {
         return lp is RecyclerView.LayoutParams
+    }
+
+    fun addPageChangeListener(l: OnPageChangeListener) {
+        if (!onPageChangeListeners.contains(l)) {
+            onPageChangeListeners.add(l)
+        }
+    }
+
+    fun removePageChangeListener(l: OnPageChangeListener) {
+        onPageChangeListeners.remove(l)
+    }
+
+    internal fun dispatchOnPageSelected(pos: Int) {
+        for (l in onPageChangeListeners) {
+            l.onPageSelected(pos)
+        }
+    }
+
+    internal fun dispatchOnPageScrollStateChanged(state: Int) {
+        for (l in onPageChangeListeners) {
+            l.onPageScrollState(state)
+        }
     }
 }

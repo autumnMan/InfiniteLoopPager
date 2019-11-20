@@ -9,6 +9,7 @@ internal fun LoopLayoutManager.handleScrollStateChanged(recyclerView: RecyclerVi
         android.util.Log.d(TAG, "state idle, cur selected pos is : $pos")
         if (pos >= 0 && curItem != pos) {
             curItem = pos
+            dispatchOnPageSelected(curItem)
         }
     }
 }
